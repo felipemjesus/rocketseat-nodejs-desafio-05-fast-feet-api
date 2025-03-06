@@ -1,9 +1,13 @@
 import { Entity } from '@/core/entities/entity'
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
+import { Optional } from '@/core/types/optional'
+
+export type StatusPacoteEnum = 'POSTADO' | 'RETIRADO' | 'ENTREGUE' | 'DEVOLVIDO'
 
 export interface PacoteProps {
   destinatarioId: UniqueEntityId
-  status: string
+  nome: string
+  status: StatusPacoteEnum
   postadoEm: Date
   retiradoEm?: Date | null
   entregueEm?: Date | null
@@ -16,11 +20,19 @@ export class Pacote extends Entity<PacoteProps> {
     return this.props.destinatarioId
   }
 
+  get nome() {
+    return this.props.nome
+  }
+
+  set nome(nome: string) {
+    this.props.nome = nome
+  }
+
   get status() {
     return this.props.status
   }
 
-  set status(status: string) {
+  set status(status: StatusPacoteEnum) {
     this.props.status = status
   }
 
@@ -70,10 +82,14 @@ export class Pacote extends Entity<PacoteProps> {
     this.props.retiradoEm = new Date()
   }
 
-  static create(props: PacoteProps, id?: UniqueEntityId) {
+  static create(
+    props: Optional<PacoteProps, 'status' | 'postadoEm'>,
+    id?: UniqueEntityId,
+  ) {
     const pacote = new Pacote(
       {
         ...props,
+        status: props.status ?? 'POSTADO',
         postadoEm: props.postadoEm ?? new Date(),
       },
       id,
