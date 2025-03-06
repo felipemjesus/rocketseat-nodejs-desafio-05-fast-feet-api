@@ -6,4 +6,5 @@ export abstract class DestinatarioRepository {
   abstract update(destinatario: Destinatario): Promise<void>
   abstract delete(destinatario: Destinatario): Promise<void>
   abstract findAll(params: PaginationParams): Promise<Destinatario[]>
+  abstract findById(destinatarioId: string): Promise<Destinatario | null>
 }
